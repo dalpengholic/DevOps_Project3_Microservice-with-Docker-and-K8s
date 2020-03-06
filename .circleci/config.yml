@@ -1,107 +1,43 @@
 # Python CircleCI 2.0 configuration file
-
+#
+# Check https://circleci.com/docs/2.0/language-python/ for more details
+#
 version: 2
-
-workflows:
-  version: 2
-  build-workflow:
-    jobs:
-      - build:
-          filters:
-            branches:
-              only: master
-
-      - build_docker:
-          requires:
-            - build
-          filters:
-            branches:
-              only: master
-
 jobs:
-
   build:
     docker:
-      - image: circleci/python:3.7.3-stretch
+    # Use the same Docker base as the project
+      - image: python:3.7.3-stretch
 
-    working_directory: ~/repo
+    # working_directory: ~/repo
 
     steps:
       - checkout
+
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "requirements.txt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+            - v1-dependencies-{{ checksum "requirements.txt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
       - run:
-          name: Create virtual env
-          command: make setup
-      - run:
-          name: Install packages
-          command: make install
-      - run:
-          name: Install hadolint
-          command: | 
-            sudo wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
-            sudo chmod +x /bin/hadolint
-      
-      # save build dependencies for next jobs
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            make install
+            # Install hadolint
+            wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
+                chmod +x /bin/hadolint
       - save_cache:
-          name: "Save build dependencies"
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
           paths:
-            - ./devops
-      
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
+
+      # run lint!
       - run:
           name: run lint
           command: |
-            make lint
-
-      - run:
-          name: run test
-          command: |
-            make test
-            
-  #Build docker image and push to dockerhub
-  build_docker:
-    docker:
-      - image: circleci/python:3.7.3-stretch
-
-    working_directory: ~/repo
-
-    steps:
-      - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
-
-        # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "requirements.txt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-
-      # Build dockerfile
-      - run:
-          name: Setup env
-          command: |
-                if [ -n "$CIRCLE_TAG" ]; then
-                    echo 'export DTAG=$CIRCLE_TAG' >> $BASH_ENV
-                else
-                    echo 'export DTAG=${CIRCLE_BRANCH}_latest' >> $BASH_ENV
-                fi
-
-      # Build Docker image
-      - run:
-          name: docker login
-          command: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
-      - run:
-          name: Build Docker image
-          command: docker build --tag dalpengholic/UdacityProject4:$DTAG .
-
-      # Push Docker image
-      - run:
-          name: Push to DockerHub
-          command: |
-                docker push dalpengholic/UdacityProject4:$DTAG##
+            . venv/bin/activate
+            make lintß
