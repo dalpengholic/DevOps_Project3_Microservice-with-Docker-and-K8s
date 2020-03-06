@@ -1,4 +1,4 @@
-<include a CircleCI status badge, here>
+[![<dalpengholic>](https://circleci.com/gh/dalpengholic/DevOps_Project4_Microservice-with-Docker-and-K8s.svg?style=svg)](https://app.circleci.com/pipelines/github/dalpengholic/DevOps_Project4_Microservice-with-Docker-and-K8s/5/workflows/a0cec4c1-823d-4856-9cec-bbaccc30d858)
 
 ## Project Overview
 
