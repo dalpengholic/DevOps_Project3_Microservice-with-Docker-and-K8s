@@ -11,7 +11,7 @@ export dockerpath="dalpengholic/udacityproject4"
 # Step 2:  
 # Authenticate & tag
 docker login --username dalpengholic
-docker tag UdacityProject4 $dockerpath
+docker tag udacityproject4 $dockerpath
 echo "Docker ID and Image: $dockerpath"
 
 
