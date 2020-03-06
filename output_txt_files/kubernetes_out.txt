@@ -1,1 +1,15 @@
-<paste log output from Kubernetes-mediated prediction, here>
+#After run_kubkernetes.sh
+NAME                               READY   STATUS    RESTARTS   AGE
+udacityproject4-6fb75f7dcd-l8cwh   1/1     Running   0          2m3s
+Forwarding from 127.0.0.1:8000 -> 80
+Forwarding from [::1]:8000 -> 80
+
+Handling connection for 8000
+
+#After make_prediction.sh
+Port: 8000
+{
+  "prediction": [
+    20.35373177134412
+  ]
+}
