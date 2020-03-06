@@ -6,7 +6,7 @@
 # Step 1:
 # Create dockerpath
 # dockerpath=<your docker ID/path>
-export dockerpath="dalpengholic/UdacityProject4"
+export dockerpath="dalpengholic/udacityproject4"
 
 # Step 2:  
 # Authenticate & tag
