@@ -98,10 +98,10 @@ jobs:
           command: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USER" --password-stdin
       - run:
           name: Build Docker image
-          command: docker build --tag aminueza/udacity-prediction:$DTAG .
+          command: docker build --tag dalpengholic/UdacityProject4:$DTAG .
 
       # Push Docker image
       - run:
           name: Push to DockerHub
           command: |
-                docker push aminueza/udacity-prediction:$DTAG##
+                docker push dalpengholic/UdacityProject4:$DTAG##
